@@ -1,0 +1,5 @@
+image_name="basis-data-agent:latest"
+size_in_bytes=$(docker image inspect --format='{{.Size}}' "$image_name")
+size_in_mb=$(awk "BEGIN {print $size_in_bytes/1024/1024}")
+echo "Size of $image_name: $size_in_mb MB"
+

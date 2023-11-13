@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    networks:
+      - task-network
+    ports:
+      - "5672:5672"
+
+  task-demo:
+    image: task-demo:latest
+    command: python task.py
+    container_name: task-demo
+    networks:
+      - task-network
+    depends_on:
+      - rabbitmq
+
+networks:
+  task-network:
+    driver: bridge
+
