@@ -16,6 +16,9 @@ COPY requirements-task.txt .
 # Install the Python dependencies
 RUN pip install -r requirements-task.txt
 
+# Install netcat
+RUN apt-get update && apt-get install -y netcat
+
 # Copy the Python script and entrypoint script to the container
 COPY task.py .
 COPY entrypoint.sh .
@@ -24,9 +27,8 @@ COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh
 
 # Expose any necessary ports (if applicable)
- EXPOSE 1800
-
+EXPOSE 1800
 
 # Define the entrypoint script to start your RPC server
-CMD ["python", "task.py"]
-
+# run entrypoint.sh
+ENTRYPOINT ["/app/entrypoint.sh"]

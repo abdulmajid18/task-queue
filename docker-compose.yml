@@ -10,7 +10,7 @@ services:
 
   task-demo:
     image: task-demo:latest
-    command: python task.py
+
     container_name: task-demo
     networks:
       - task-network
