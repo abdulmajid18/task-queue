@@ -4,20 +4,28 @@ services:
     image: rabbitmq:management
     container_name: rabbitmq
     networks:
-      - task-network
+      - task-network-demo
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER:-guest}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-guest}
     ports:
-      - "5672:5672"
+      - "${RABBITMQ_PORT:-5672}:5672"
+    env_file:
+      - .env
 
-  task-demo:
+  task-listener:
     image: task-demo:latest
-
-    container_name: task-demo
+    container_name: task-listener
     networks:
-      - task-network
+      - task-network-demo
     depends_on:
       - rabbitmq
+    environment:
+      - RABBITMQ_HOST=${RABBITMQ_HOST:-rabbitmq}
+      - RABBITMQ_PORT=${RABBITMQ_PORT:-5672}
+    env_file:
+      - .env
 
 networks:
   task-network:
     driver: bridge
-

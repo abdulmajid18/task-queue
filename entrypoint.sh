@@ -1,10 +1,13 @@
 #!/bin/bash
 
+RABBITMQ_HOST="${RABBITMQ_HOST:-rabbitmq}"
+RABBITMQ_PORT="${RABBITMQ_PORT:-5672}"
+
 # Function to check if RabbitMQ is up on port 5672
 wait_for_rabbitmq() {
-    until nc -z -w 1 "rabbitmq" "5672"; do
-        echo "Waiting for RabbitMQ to be up..."
-        sleep 20
+    until nc -z -w 1 "$RABBITMQ_HOST" "$RABBITMQ_PORT"; do
+        echo "Waiting for RabbitMQ to be up on $RABBITMQ_HOST:$RABBITMQ_PORT..."
+        sleep 10
     done
 }
 

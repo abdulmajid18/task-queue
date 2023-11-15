@@ -1,11 +1,15 @@
 import pika
 import multiprocessing
+import os
 
 print("RPC SERVER INITIALIZED")
 
 EXCHANGE_NAME = "generation_exchange"
 QUEUE_NAME = "generation_queue"
 ROUTING_KEY = "generation_route"
+
+rabbitmq_host = os.environ.get('RABBITMQ_HOST', 'localhost')
+rabbitmq_port = os.environ.get('RABBITMQ_PORT', '5672')
 
 
 def fib(n):
@@ -33,10 +37,10 @@ def on_request(ch, method, props, body):
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-def worker():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host="rabbitmq"))
-    channel = connection.channel()
 
+def worker():     
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host, port=rabbitmq_port))
+    channel = connection.channel()
     # Declare an exchange
     channel.exchange_declare(exchange=EXCHANGE_NAME, exchange_type='direct', durable=True)
 
